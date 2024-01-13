@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  project_verificator_service:
+    container_name: project_verificator_service
+    build:
+      context: ./
+      dockerfile: Dockerfile.project_verificator_service
+    restart: always
+    ports:
+      - "8080:8080"

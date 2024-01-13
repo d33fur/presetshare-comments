@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+/project_verificator_service/build/
+logs.cpp

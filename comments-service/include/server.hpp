@@ -1,3 +1,6 @@
+#ifndef SERVER_H
+#define SERVER_H
+
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/beast/version.hpp>
@@ -8,16 +11,12 @@
 #include <iostream>
 #include <memory>
 #include <string>
+// #include <cassandra.h>
 
 namespace beast = boost::beast;
 namespace http = beast::http;
 namespace net = boost::asio;
 using tcp = boost::asio::ip::tcp;
-
-namespace my_program_state {
-  std::size_t request_count();
-  std::time_t now();
-}
 
 class http_connection : public std::enable_shared_from_this<http_connection> {
  public:
@@ -27,7 +26,9 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
  private:
   void read_request();
   void process_request();
-  void create_response();
+  void create_get_response();
+  void create_post_response();
+  void create_patch_response();
   void write_response();
   void check_deadline();
 
@@ -44,3 +45,5 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
 };
 
 void http_server(tcp::acceptor& acceptor, tcp::socket& socket);
+
+#endif // SERVER_HPP

@@ -1,10 +1,45 @@
 version: '3.8'
 services:
-  project_verificator_service:
-    container_name: project_verificator_service
+  comments-service:
+    container_name: comments-service
     build:
       context: ./
-      dockerfile: Dockerfile.project_verificator_service
+      dockerfile: Dockerfile.comments-service
     restart: always
     ports:
       - "8080:8080"
+    # healthcheck:
+    #   test: ["CMD", "nodetool", "status"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+
+  scylladb-node1:
+    image: scylladb/scylla:5.2
+    container_name: scylladb-node1
+    restart: always
+    ports:
+      - "9042:9042"
+    volumes:
+      - ./scylladb_data:/var/lib/scylla
+      - ./scylladb-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "nodetool", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  scylladb_data:
+  scylladb-init:
+  # scylla-node1:
+  #   container_name: comments-scylla-node1
+  #   image: scylladb/scylla:5.2
+  #   restart: always
+  #   command: --seeds=comments-scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+  #   volumes:
+  #     - "./scylla/scylla.yaml:/etc/scylla/scylla.yaml"
+  #     - "./scylla/cassandra-rackdc.properties.dc1:/etc/scylla/cassandra-rackdc.properties"
+  #     - "./scylla/mutant-data.txt:/mutant-data.txt"
+  #   networks:
+  #     web:

@@ -1,1 +1,2 @@
-project_verificator_service/build
+comments-service/build
+/comments-service/CMakeUserPresets.json

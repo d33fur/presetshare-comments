@@ -31,6 +31,9 @@
 *.out
 *.app
 
-/project_verificator_service/build/
+/comments-service/build
+/comments-service/CMakeUserPresets.json
 logs.cpp
 .vscode
+scylladb-init/
+scylladb_data/

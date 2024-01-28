@@ -1,6 +1,7 @@
 [requires]
 boost/1.84.0
 nlohmann_json/3.11.3
+cassandra-cpp-driver/2.17.1
 
 [tool_requires]
 cmake/3.28.1

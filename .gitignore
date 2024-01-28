@@ -35,5 +35,4 @@
 /comments-service/CMakeUserPresets.json
 logs.cpp
 .vscode
-scylladb-init/
-scylladb_data/
+scylla/scylla-data/

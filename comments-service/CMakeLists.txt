@@ -6,13 +6,10 @@ INCLUDE(${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
 
 SET(CMAKE_CXX_STANDARD 20)
 
-# list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
-
 FIND_PACKAGE(Boost 1.82.0 REQUIRED)
 FIND_PACKAGE(Threads REQUIRED)
 FIND_PACKAGE(nlohmann_json REQUIRED)
-# include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-# conan_basic_setup()
+FIND_PACKAGE(cassandra-cpp-driver REQUIRED)
 
 SET(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 SET(SOURCE_DIR ${CMAKE_SOURCE_DIR}/source)
@@ -21,12 +18,13 @@ FILE(GLOB_RECURSE SOURCES
     ${INCLUDE_DIR}/*.hpp
     ${SOURCE_DIR}/*.cpp)
 
-INCLUDE_DIRECTORIES(${INCLUDE_DIR})
+INCLUDE_DIRECTORIES(
+    ${INCLUDE_DIR})
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SOURCES})
 
-# target_link_libraries (${PROJECT_NAME} ${CONAN_LIBS})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE 
     ${Boost_LIBRARIES} 
     Threads::Threads
-    nlohmann_json::nlohmann_json)
+    nlohmann_json::nlohmann_json
+    cassandra-cpp-driver::cassandra-cpp-driver)

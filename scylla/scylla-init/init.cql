@@ -7,11 +7,14 @@ CREATE TABLE IF NOT EXISTS comments (
     comment_id uuid,
     author text,
     text text,
+    deleted boolean,
     created_by bigint,
     created_time bigint,
     updated_time bigint,
     PRIMARY KEY ((entity), created_time, comment_id)
 ) WITH CLUSTERING ORDER BY (created_time DESC);
 
-INSERT INTO comments (comment_id, entity, author, text, created_by, created_time, updated_time)
-VALUES (uuid(), 'preset-1234', 'user123', 'Отличный комментарий!', 1, toUnixTimestamp(now()), toUnixTimestamp(now()));
+CREATE INDEX ON comments (deleted);
+
+INSERT INTO comments (comment_id, entity, author, text, deleted, created_by, created_time, updated_time)
+VALUES (uuid(), 'preset-1234', 'user123', 'Отличный комментарий!', false, 1, toUnixTimestamp(now()), toUnixTimestamp(now()));

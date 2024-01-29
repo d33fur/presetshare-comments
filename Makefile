@@ -28,7 +28,9 @@ logs:
 
 .PHONY: clear
 clear:
-	@docker-compose down || echo no containers to remove
+	(docker-compose kill  && \
+	docker-compose rm -f) || \
+	echo no containers to remove
 
 .PHONY: local
 local: conan-rebuild local-rebuild
@@ -49,9 +51,6 @@ conan-rebuild:
 	cd comments-service/build && \
 	conan install .. --output-folder=. --build=missing
 
-
-.PHONY: start-bd
-start-bd:
-	docker run --name some-scylla -d scylladb/scylla
-	docker exec -it some-scylla cqlsh
-
+.PHONY: bd-cqlsh
+bd-cqlsh:
+	docker exec -it scylla-node1 cqlsh

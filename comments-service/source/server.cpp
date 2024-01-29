@@ -114,10 +114,11 @@ void http_connection::check_deadline() {
 }
 
 void http_connection::get_comments() {
-  std::string entity((request_.find("entity"))->value());
+  std::string entity((request_.find("Entity"))->value());
 
   std::stringstream query_ss;
-  query_ss << "SELECT * FROM keyspace_comments.comments WHERE entity = '" << entity << "'";
+  query_ss << "SELECT * FROM keyspace_comments.comments WHERE entity = '" << entity
+           << "' AND deleted = false";
 
   std::string query_str = query_ss.str();
   const char* query = query_str.c_str();
@@ -128,45 +129,49 @@ void http_connection::add_comment() {
   auto json_body = get_request_json_body();
 
   std::string text(json_body.value("text", ""));
-  std::string author((request_.find("author"))->value());
-  std::string entity((request_.find("entity"))->value());
-  int64_t created_by = std::stoll(std::string(request_.find("created_by")->value()));
-  //доделать проверку uuid или возможно не нужно
+  std::string author((request_.find("Author"))->value());
+  std::string entity((request_.find("Entity"))->value());
+  int64_t created_by = std::stoll(std::string(request_.find("Created_by")->value()));
+
   std::stringstream query_ss;
   query_ss << "INSERT INTO keyspace_comments.comments (comment_id, entity, author, "
-           << "text, created_by, created_time, updated_time) "
-           << "VALUES (uuid(), '" << entity << "', '" << author << "', '" << text << "', " 
+           << "text, deleted, created_by, created_time, updated_time) "
+           << "VALUES (uuid(), '" << entity << "', '" << author << "', '" << text << "', false, " 
            << created_by << ", toUnixTimestamp(now()), toUnixTimestamp(now()));";
 
   std::string query_str = query_ss.str();
   const char* query = query_str.c_str();
   execute_query(query);
 }
-//'Invalid STRING constant (736be8dc-ee65-44d6-bc04-91a2c52c6ad0) for "comment_id" of type uuid'
+
 void http_connection::delete_comment() {
-  std::string entity((request_.find("entity"))->value());
-  std::string comment_id((request_.find("comment_id")->value()));
+  std::string entity((request_.find("Entity"))->value());
+  std::string comment_id((request_.find("Comment_id")->value()));
+  int64_t created_time = std::stoll(std::string(request_.find("Created_time")->value()));
 
   std::stringstream query_ss;
-  query_ss << "DELETE FROM keyspace_comments.comments WHERE entity = '"
-           << entity << "' AND comment_id = '" << comment_id << "';";
+  query_ss << "UPDATE keyspace_comments.comments SET deleted = true WHERE entity = '"
+           << entity << "' AND comment_id = " << comment_id << " AND created_time = "
+           << created_time << ";";
 
   std::string query_str = query_ss.str();
   const char* query = query_str.c_str();
   execute_query(query);
 }
-//'PRIMARY KEY column "comment_id" cannot be restricted as preceding column "created_time" is not restricted'
+
 void http_connection::change_comment() {
   auto json_body = get_request_json_body();
 
   std::string text(json_body.value("text", ""));
-  std::string entity((request_.find("entity"))->value());
-  std::string comment_id((request_.find("comment_id")->value()));
+  std::string entity((request_.find("Entity"))->value());
+  std::string comment_id((request_.find("Comment_id")->value()));
+  int64_t created_time = std::stoll(std::string(request_.find("Created_time")->value()));
 
   std::stringstream query_ss;
   query_ss << "UPDATE keyspace_comments.comments SET text = '" << text
            << "', updated_time = toUnixTimestamp(now())"
-           << " WHERE entity = '" << entity << "' AND comment_id = " << comment_id << ";";
+           << " WHERE entity = '" << entity << "' AND comment_id = " << comment_id 
+           << " AND created_time = " << created_time << ";";
 
   const std::string query_str = query_ss.str();
   const char* query = query_str.c_str();
@@ -177,7 +182,7 @@ void http_connection::execute_query(const char* query) {
   CassFuture* connect_future = NULL;
   CassCluster* cluster = cass_cluster_new();
   CassSession* session = cass_session_new();
-  const char* hosts = "127.0.0.1";
+  const char* hosts = "172.21.0.2"; //127.0.0.1
 
   cass_cluster_set_contact_points(cluster, hosts);
   connect_future = cass_session_connect(session, cluster);
@@ -261,6 +266,12 @@ nlohmann::json http_connection::get_json_row(const CassResult* result, CassItera
         cass_int64_t column_value;
         cass_value_get_int64(column, &column_value);
         json_row[col_name] = column_value;
+        break;
+      }
+      case CASS_VALUE_TYPE_BOOLEAN: {
+        cass_bool_t column_value;
+        cass_value_get_bool(column, &column_value);
+        json_row[col_name] = (column_value == cass_true ? true : false);
         break;
       }
       default: {

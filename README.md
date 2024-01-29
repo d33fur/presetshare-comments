@@ -1,6 +1,6 @@
 # presetshare-comments-service
 ## About
-The service is written in **c++** and uses **boost/1.84.0**, **cassandra-cpp-driver/2.17.1**, **nlohmann_json/3.11.3**, **ScyllaDB/5.2**, **doxygen/1.9.4**.
+The service is written in **c++** and uses **boost/1.84.0**, **cassandra-cpp-driver/2.17.1**, **nlohmann_json/3.11.3**, **ScyllaDB/5.2**.
 
 **Conan** and **cmake** are used to download packages and build the project.
 

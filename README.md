@@ -1,19 +1,33 @@
 # presetshare-comments-service
 ## About
-The service is written in **c++** and uses **boost.beast**, **cassandra-cpp-driver**, **ScyllaDB**.
+The service is written in **c++** and uses **boost/1.84.0**, **cassandra-cpp-driver/2.17.1**, **nlohmann_json/3.11.3**, **ScyllaDB/5.2**, **doxygen/1.9.4**.
 
 **Conan** and **cmake** are used to download packages and build the project.
 
 ### ScyllaDB
 
-|**KEYSPACE**|keyspace_comments|
+|**KEYSPACE**|**TABLE**|
 |----|----|
-|**TABLE**|comments|
+|keyspace_comments|comments|
 
-|**column name**|entity|comment id|author|text|deleted|created_by|created_time|updated_time|
-|----|----|----|----|----|----|----|----|----|
-|**data type**|text|uuid|text|text|boolean|bigint|bigint|bigint|
+|**column name**|-|entity|comment id|author|text|deleted|created_by|created_time|updated_time|
+|----|----|----|----|----|----|----|----|----|----|
+|**data type**|-|text|uuid|text|text|boolean|bigint|bigint|bigint|
 
+Additional details:
+
+- ```**REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 3}**```
+
+- ```**CLUSTERING ORDER BY (created_time DESC)**```
+
+- ```**PRIMARY KEY ((entity), created_time, comment_id)**```
+
+- Flags in docker-compose:
+    - ```**--seeds=scylla-node1**``` seed nodes are the initial contact points for a ScyllaDB cluster
+    - ```**--smp 1**``` number of cpu cores available for ScyllaDB
+    - ```**--memory 750M**``` maximum amount of memory ScyllaDB should use
+    - ```**--ovrprovisioned 1**``` indicates that ScyllaDB is running on an overprovisioned machine
+    - ```**--api-adress 0.0.0.0**``` the Scylla API will listen on all network interfaces available to the container
 ## Usage
 First of all you need to install make, docker and docker-compose:
 ```bash
@@ -23,33 +37,39 @@ Clone the repository:
 ```bash
 git clone https://github.com/d33fur/presetshare-comments-service.git && cd presetshare-comments-service
 ```
-start all
+Start all
 ```bash
 make all
 ```
-logs
+Wait a bit and
+```bash
+make db-init
+```
+Logs
 ```bash
 make logs
 ```
-start
+More commands:
+
+Start
 ```bash
 make start
 ```
-stop
+Stop
 ```bash
 make stop
 ```
-restart
+Restart
 ```bash
 make restart
 ```
-clear
+Clear
 ```bash
 make clear
 ```
-to enter sqlsh
+To enter db sqlsh
 ```bash
-make bd-cqlsh
+make db-cqlsh
 ```
 
 --------

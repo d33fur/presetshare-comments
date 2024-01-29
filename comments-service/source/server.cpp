@@ -1,5 +1,5 @@
 #include "server.hpp"
-// #include "logs.cpp"
+#include "logs.cpp"
 
 http_connection::http_connection(tcp::socket socket) : socket_(std::move(socket)) {}
 
@@ -116,6 +116,8 @@ void http_connection::check_deadline() {
 void http_connection::get_comments() {
   std::string entity((request_.find("Entity"))->value());
 
+  BOOST_LOG_TRIVIAL(info) << "Fetching comments for entity: " << entity;
+
   std::stringstream query_ss;
   query_ss << "SELECT * FROM keyspace_comments.comments WHERE entity = '" << entity
            << "' AND deleted = false";
@@ -133,6 +135,8 @@ void http_connection::add_comment() {
   std::string entity((request_.find("Entity"))->value());
   int64_t created_by = std::stoll(std::string(request_.find("Created_by")->value()));
 
+  BOOST_LOG_TRIVIAL(info) << "Adding new comment for entity: " << entity;
+
   std::stringstream query_ss;
   query_ss << "INSERT INTO keyspace_comments.comments (comment_id, entity, author, "
            << "text, deleted, created_by, created_time, updated_time) "
@@ -148,6 +152,8 @@ void http_connection::delete_comment() {
   std::string entity((request_.find("Entity"))->value());
   std::string comment_id((request_.find("Comment_id")->value()));
   int64_t created_time = std::stoll(std::string(request_.find("Created_time")->value()));
+
+  BOOST_LOG_TRIVIAL(info) << "Deleting comment with ID: " << comment_id << " for entity: " << entity;
 
   std::stringstream query_ss;
   query_ss << "UPDATE keyspace_comments.comments SET deleted = true WHERE entity = '"
@@ -166,6 +172,8 @@ void http_connection::change_comment() {
   std::string entity((request_.find("Entity"))->value());
   std::string comment_id((request_.find("Comment_id")->value()));
   int64_t created_time = std::stoll(std::string(request_.find("Created_time")->value()));
+
+  BOOST_LOG_TRIVIAL(info) << "Changing comment with ID: " << comment_id << " for entity: " << entity;
 
   std::stringstream query_ss;
   query_ss << "UPDATE keyspace_comments.comments SET text = '" << text
@@ -296,7 +304,7 @@ nlohmann::json http_connection::get_request_json_body() {
     ss << boost::beast::make_printable(buffer);
   }
 
-  return nlohmann::json::parse(ss);//.str()
+  return nlohmann::json::parse(ss);
 }
 
 void http_server(tcp::acceptor& acceptor, tcp::socket& socket) {

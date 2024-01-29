@@ -16,7 +16,7 @@ RUN apt-get update && \
     conan profile detect && \
     conan install .. --output-folder=. --build=missing && \ 
     source conanbuild.sh && \
-    cmake -DCMAKE_BUILD_TYPE=Debug .. && \
+    cmake -DCMAKE_BUILD_TYPE=Release .. && \
     cmake --build . && \
     source deactivate_conanbuild.sh
 

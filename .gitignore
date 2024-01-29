@@ -33,6 +33,5 @@
 
 /comments-service/build
 /comments-service/CMakeUserPresets.json
-logs.cpp
 .vscode
 scylla/scylla-data/

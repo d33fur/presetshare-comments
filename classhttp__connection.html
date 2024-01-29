@@ -72,66 +72,93 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Http connection class.  
+ <a href="classhttp__connection.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="server_8hpp_source.html">server.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:acee8b16710c48b4ea5ae43efccadbb9d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#acee8b16710c48b4ea5ae43efccadbb9d">http_connection</a> (tcp::socket socket)</td></tr>
+<tr class="memdesc:acee8b16710c48b4ea5ae43efccadbb9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of the <a class="el" href="classhttp__connection.html" title="Http connection class.">http_connection</a> class.  <a href="classhttp__connection.html#acee8b16710c48b4ea5ae43efccadbb9d">More...</a><br /></td></tr>
 <tr class="separator:acee8b16710c48b4ea5ae43efccadbb9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09c3c16fcf37cfe44eb933a9ad45dafd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a09c3c16fcf37cfe44eb933a9ad45dafd">start</a> ()</td></tr>
+<tr class="memdesc:a09c3c16fcf37cfe44eb933a9ad45dafd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls read_request and check_deadline.  <a href="classhttp__connection.html#a09c3c16fcf37cfe44eb933a9ad45dafd">More...</a><br /></td></tr>
 <tr class="separator:a09c3c16fcf37cfe44eb933a9ad45dafd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a1625b8b6ad2270ae440bb7e94ebfcf91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a1625b8b6ad2270ae440bb7e94ebfcf91">read_request</a> ()</td></tr>
+<tr class="memdesc:a1625b8b6ad2270ae440bb7e94ebfcf91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Asynchronously reads the request and calls process_request.  <a href="classhttp__connection.html#a1625b8b6ad2270ae440bb7e94ebfcf91">More...</a><br /></td></tr>
 <tr class="separator:a1625b8b6ad2270ae440bb7e94ebfcf91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29fe47ffee2744ac38ff9140a5925e45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a29fe47ffee2744ac38ff9140a5925e45">process_request</a> ()</td></tr>
+<tr class="memdesc:a29fe47ffee2744ac38ff9140a5925e45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Causes the request to be processed according to the corresponding GET POST PATCH type, and then calls write_response.  <a href="classhttp__connection.html#a29fe47ffee2744ac38ff9140a5925e45">More...</a><br /></td></tr>
 <tr class="separator:a29fe47ffee2744ac38ff9140a5925e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7d68b489952aedd51d5406ddda1b92a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#ac7d68b489952aedd51d5406ddda1b92a">create_get_response</a> ()</td></tr>
+<tr class="memdesc:ac7d68b489952aedd51d5406ddda1b92a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the target URL.  <a href="classhttp__connection.html#ac7d68b489952aedd51d5406ddda1b92a">More...</a><br /></td></tr>
 <tr class="separator:ac7d68b489952aedd51d5406ddda1b92a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a009797802434591b4371fb143b818554"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a009797802434591b4371fb143b818554">create_post_response</a> ()</td></tr>
+<tr class="memdesc:a009797802434591b4371fb143b818554"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the target URL.  <a href="classhttp__connection.html#a009797802434591b4371fb143b818554">More...</a><br /></td></tr>
 <tr class="separator:a009797802434591b4371fb143b818554"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab012b145c546d29eb2fe8136f123b8ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#ab012b145c546d29eb2fe8136f123b8ab">create_patch_response</a> ()</td></tr>
+<tr class="memdesc:ab012b145c546d29eb2fe8136f123b8ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the target URL.  <a href="classhttp__connection.html#ab012b145c546d29eb2fe8136f123b8ab">More...</a><br /></td></tr>
 <tr class="separator:ab012b145c546d29eb2fe8136f123b8ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada7ef2097afbc7a2ae13263f9edaf482"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#ada7ef2097afbc7a2ae13263f9edaf482">write_response</a> ()</td></tr>
+<tr class="memdesc:ada7ef2097afbc7a2ae13263f9edaf482"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writing from the buffer and sending a response.  <a href="classhttp__connection.html#ada7ef2097afbc7a2ae13263f9edaf482">More...</a><br /></td></tr>
 <tr class="separator:ada7ef2097afbc7a2ae13263f9edaf482"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdffc103501d98d02eca7a76be6c938e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#afdffc103501d98d02eca7a76be6c938e">check_deadline</a> ()</td></tr>
+<tr class="memdesc:afdffc103501d98d02eca7a76be6c938e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the lifetime of current session.  <a href="classhttp__connection.html#afdffc103501d98d02eca7a76be6c938e">More...</a><br /></td></tr>
 <tr class="separator:afdffc103501d98d02eca7a76be6c938e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0476a3c0507e42779fc33c0572652313"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a0476a3c0507e42779fc33c0572652313">get_comments</a> ()</td></tr>
+<tr class="memdesc:a0476a3c0507e42779fc33c0572652313"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves data from the query and creates an sql query.  <a href="classhttp__connection.html#a0476a3c0507e42779fc33c0572652313">More...</a><br /></td></tr>
 <tr class="separator:a0476a3c0507e42779fc33c0572652313"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade62bebc01a37dabf1b489d8e30f1a1b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#ade62bebc01a37dabf1b489d8e30f1a1b">delete_comment</a> ()</td></tr>
+<tr class="memdesc:ade62bebc01a37dabf1b489d8e30f1a1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves data from the query and creates an sql query.  <a href="classhttp__connection.html#ade62bebc01a37dabf1b489d8e30f1a1b">More...</a><br /></td></tr>
 <tr class="separator:ade62bebc01a37dabf1b489d8e30f1a1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c11385d0cddc3f5c4834612fad39bcc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a8c11385d0cddc3f5c4834612fad39bcc">add_comment</a> ()</td></tr>
+<tr class="memdesc:a8c11385d0cddc3f5c4834612fad39bcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves data from the query and creates an sql query.  <a href="classhttp__connection.html#a8c11385d0cddc3f5c4834612fad39bcc">More...</a><br /></td></tr>
 <tr class="separator:a8c11385d0cddc3f5c4834612fad39bcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad57e497e268fc73fc7ba29907dc36b90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#ad57e497e268fc73fc7ba29907dc36b90">change_comment</a> ()</td></tr>
+<tr class="memdesc:ad57e497e268fc73fc7ba29907dc36b90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves data from the query and creates an sql query.  <a href="classhttp__connection.html#ad57e497e268fc73fc7ba29907dc36b90">More...</a><br /></td></tr>
 <tr class="separator:ad57e497e268fc73fc7ba29907dc36b90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d140ea1c5d30fc63e20273c1cbe7576"><td class="memItemLeft" align="right" valign="top">nlohmann::json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a0d140ea1c5d30fc63e20273c1cbe7576">get_request_json_body</a> ()</td></tr>
+<tr class="memdesc:a0d140ea1c5d30fc63e20273c1cbe7576"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a json object from the request body.  <a href="classhttp__connection.html#a0d140ea1c5d30fc63e20273c1cbe7576">More...</a><br /></td></tr>
 <tr class="separator:a0d140ea1c5d30fc63e20273c1cbe7576"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4fd20690a3b692afb3c60f167db1982"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#aa4fd20690a3b692afb3c60f167db1982">execute_query</a> (const char *query)</td></tr>
+<tr class="memdesc:aa4fd20690a3b692afb3c60f167db1982"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a session and connects to the database.  <a href="classhttp__connection.html#aa4fd20690a3b692afb3c60f167db1982">More...</a><br /></td></tr>
 <tr class="separator:aa4fd20690a3b692afb3c60f167db1982"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c084d4093d21e50b984c95caa6cfaef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a6c084d4093d21e50b984c95caa6cfaef">make_statement_and_send_query</a> (const char *query, CassSession *session)</td></tr>
+<tr class="memdesc:a6c084d4093d21e50b984c95caa6cfaef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes query.  <a href="classhttp__connection.html#a6c084d4093d21e50b984c95caa6cfaef">More...</a><br /></td></tr>
 <tr class="separator:a6c084d4093d21e50b984c95caa6cfaef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72df497dd42d6167f770bef24a1ebcef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a72df497dd42d6167f770bef24a1ebcef">handle_query_result</a> (CassFuture *result_future)</td></tr>
+<tr class="memdesc:a72df497dd42d6167f770bef24a1ebcef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes the response from the database.  <a href="classhttp__connection.html#a72df497dd42d6167f770bef24a1ebcef">More...</a><br /></td></tr>
 <tr class="separator:a72df497dd42d6167f770bef24a1ebcef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d54024975c17dfe9c4074149a135a6c"><td class="memItemLeft" align="right" valign="top">nlohmann::json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a0d54024975c17dfe9c4074149a135a6c">get_json_row</a> (const CassResult *result, CassIterator *rows)</td></tr>
+<tr class="memdesc:a0d54024975c17dfe9c4074149a135a6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of ODE system of equations.  <a href="classhttp__connection.html#a0d54024975c17dfe9c4074149a135a6c">More...</a><br /></td></tr>
 <tr class="separator:a0d54024975c17dfe9c4074149a135a6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a6156bd99a81024e98a80e3e23ac072f6"><td class="memItemLeft" align="right" valign="top">tcp::socket&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a6156bd99a81024e98a80e3e23ac072f6">socket_</a></td></tr>
+<tr class="memdesc:a6156bd99a81024e98a80e3e23ac072f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Socker.  <a href="classhttp__connection.html#a6156bd99a81024e98a80e3e23ac072f6">More...</a><br /></td></tr>
 <tr class="separator:a6156bd99a81024e98a80e3e23ac072f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e762140532591434b7fecd74717cd65"><td class="memItemLeft" align="right" valign="top">beast::flat_buffer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a5e762140532591434b7fecd74717cd65">buffer_</a> {8192}</td></tr>
+<tr class="memdesc:a5e762140532591434b7fecd74717cd65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buffer for response.  <a href="classhttp__connection.html#a5e762140532591434b7fecd74717cd65">More...</a><br /></td></tr>
 <tr class="separator:a5e762140532591434b7fecd74717cd65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5dd3b5c6d11b6fca69910b4d6acb2580"><td class="memItemLeft" align="right" valign="top">http::request&lt; http::dynamic_body &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a5dd3b5c6d11b6fca69910b4d6acb2580">request_</a></td></tr>
+<tr class="memdesc:a5dd3b5c6d11b6fca69910b4d6acb2580"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request.  <a href="classhttp__connection.html#a5dd3b5c6d11b6fca69910b4d6acb2580">More...</a><br /></td></tr>
 <tr class="separator:a5dd3b5c6d11b6fca69910b4d6acb2580"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a575ef42be18384d7f4147119ab48eec4"><td class="memItemLeft" align="right" valign="top">http::response&lt; http::dynamic_body &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a575ef42be18384d7f4147119ab48eec4">response_</a></td></tr>
+<tr class="memdesc:a575ef42be18384d7f4147119ab48eec4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Response.  <a href="classhttp__connection.html#a575ef42be18384d7f4147119ab48eec4">More...</a><br /></td></tr>
 <tr class="separator:a575ef42be18384d7f4147119ab48eec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ef480d41a3be9fa2a180e5e169ab297"><td class="memItemLeft" align="right" valign="top">net::steady_timer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a7ef480d41a3be9fa2a180e5e169ab297">deadline_</a></td></tr>
+<tr class="memdesc:a7ef480d41a3be9fa2a180e5e169ab297"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timer for session timeout.  <a href="classhttp__connection.html#a7ef480d41a3be9fa2a180e5e169ab297">More...</a><br /></td></tr>
 <tr class="separator:a7ef480d41a3be9fa2a180e5e169ab297"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00023">23</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<div class="textblock"><p>Http connection class. </p>
+
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00026">26</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acee8b16710c48b4ea5ae43efccadbb9d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acee8b16710c48b4ea5ae43efccadbb9d">&#9670;&nbsp;</a></span>http_connection()</h2>
@@ -148,6 +175,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructor of the <a class="el" href="classhttp__connection.html" title="Http connection class.">http_connection</a> class. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">socket</td><td>Socket </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00004">4</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
@@ -177,6 +212,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves data from the query and creates an sql query. </p>
+
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00130">130</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
@@ -203,6 +240,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Retrieves data from the query and creates an sql query. </p>
 
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00168">168</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
@@ -231,6 +270,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Checks the lifetime of current session. </p>
+
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00106">106</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
@@ -257,6 +298,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Checks the target URL. </p>
 
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00061">61</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
@@ -285,6 +328,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Checks the target URL. </p>
+
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00081">81</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
@@ -312,6 +357,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Checks the target URL. </p>
+
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00071">71</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
@@ -338,6 +385,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Retrieves data from the query and creates an sql query. </p>
 
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00151">151</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
@@ -367,6 +416,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Creates a session and connects to the database. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>CQL query </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00189">189</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
@@ -393,6 +450,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Retrieves data from the query and creates an sql query. </p>
 
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00116">116</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
@@ -432,6 +491,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Type of ODE system of equations. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">result</td><td>CassResult object representing result of the query </td></tr>
+    <tr><td class="paramname">rows</td><td>Iterator for the rows of the result </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00249">249</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
@@ -458,6 +526,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Retrieves a json object from the request body. </p>
 
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00299">299</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
@@ -486,6 +556,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Processes the response from the database. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">result_future</td><td>CassFuture object representing furure result of the query </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00234">234</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
@@ -525,6 +603,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Executes query. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>CQL query </td></tr>
+    <tr><td class="paramname">session</td><td>Session </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00212">212</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
@@ -551,6 +638,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Causes the request to be processed according to the corresponding GET POST PATCH type, and then calls write_response. </p>
 
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00023">23</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
@@ -579,6 +668,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Asynchronously reads the request and calls process_request. </p>
+
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00011">11</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
@@ -597,6 +688,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Calls read_request and check_deadline. </p>
 
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00006">6</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
@@ -625,6 +718,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Writing from the buffer and sending a response. </p>
+
 <p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00094">94</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
@@ -650,7 +745,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00051">51</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p>Buffer for response. </p>
+
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00130">130</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -675,9 +772,11 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">{</div>
 <div class="line">      <a class="code" href="classhttp__connection.html#a6156bd99a81024e98a80e3e23ac072f6">socket_</a>.get_executor(), std::chrono::seconds(60)}</div>
-<div class="ttc" id="aclasshttp__connection_html_a6156bd99a81024e98a80e3e23ac072f6"><div class="ttname"><a href="classhttp__connection.html#a6156bd99a81024e98a80e3e23ac072f6">http_connection::socket_</a></div><div class="ttdeci">tcp::socket socket_</div><div class="ttdef"><b>Definition:</b> <a href="server_8hpp_source.html#l00049">server.hpp:49</a></div></div>
+<div class="ttc" id="aclasshttp__connection_html_a6156bd99a81024e98a80e3e23ac072f6"><div class="ttname"><a href="classhttp__connection.html#a6156bd99a81024e98a80e3e23ac072f6">http_connection::socket_</a></div><div class="ttdeci">tcp::socket socket_</div><div class="ttdoc">Socker.</div><div class="ttdef"><b>Definition:</b> <a href="server_8hpp_source.html#l00127">server.hpp:127</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00057">57</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p>Timer for session timeout. </p>
+
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00139">139</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -701,7 +800,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00053">53</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p>Request. </p>
+
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00133">133</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -725,7 +826,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00055">55</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p>Response. </p>
+
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00136">136</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -749,7 +852,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00049">49</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p>Socker. </p>
+
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00127">127</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>

@@ -89,48 +89,48 @@ $(function() {
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#pragma warning(disable:4503)</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="logs_8cpp.html#a873840c6f2fc327ce7219deee148d925">   20</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="logs_8cpp.html#a873840c6f2fc327ce7219deee148d925">init_log</a>(<span class="keywordtype">void</span>) {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keyword">namespace </span>log = boost::log;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keyword">namespace </span>keywords = boost::log::keywords;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keyword">namespace </span>expr = boost::log::expressions;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  log::add_common_attributes();</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  log::core::get()-&gt;add_global_attribute(<span class="stringliteral">&quot;Scope&quot;</span>, log::attributes::named_scope());</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  log::core::get()-&gt;set_filter(log::trivial::severity &gt;= log::trivial::trace);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">auto</span> fmtTimeStamp = expr::</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    format_date_time&lt;boost::posix_time::ptime&gt;(<span class="stringliteral">&quot;TimeStamp&quot;</span>, <span class="stringliteral">&quot;%Y-%m-%d %H:%M:%S.%f&quot;</span>);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <span class="keyword">auto</span> fmtThreadId = expr::</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    attr&lt;boost::log::attributes::current_thread_id::value_type&gt;(<span class="stringliteral">&quot;ThreadID&quot;</span>);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keyword">auto</span> fmtSeverity = expr::</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    attr&lt;boost::log::trivial::severity_level&gt;(<span class="stringliteral">&quot;Severity&quot;</span>);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keyword">auto</span> fmtScope = expr::</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    format_named_scope(<span class="stringliteral">&quot;Scope&quot;</span>,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    keywords::format = <span class="stringliteral">&quot;%n(%f:%l)&quot;</span>,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    keywords::iteration = expr::reverse,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    keywords::depth = 2);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  boost::log::formatter logFmt =</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    expr::format(<span class="stringliteral">&quot;[%1%] (%2%) [%3%] [%4%] %5%&quot;</span>)</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    % fmtTimeStamp % fmtThreadId % fmtSeverity % fmtScope % expr::smessage;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <span class="keyword">auto</span> consoleSink = boost::log::add_console_log(std::clog);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  consoleSink-&gt;set_formatter(logFmt);</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="logs_8cpp.html#a873840c6f2fc327ce7219deee148d925">   23</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="logs_8cpp.html#a873840c6f2fc327ce7219deee148d925">init_log</a>(<span class="keywordtype">void</span>) {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">namespace </span>log = boost::log;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keyword">namespace </span>keywords = boost::log::keywords;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">namespace </span>expr = boost::log::expressions;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  log::add_common_attributes();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  log::core::get()-&gt;add_global_attribute(<span class="stringliteral">&quot;Scope&quot;</span>, log::attributes::named_scope());</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  log::core::get()-&gt;set_filter(log::trivial::severity &gt;= log::trivial::trace);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keyword">auto</span> fmtTimeStamp = expr::</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    format_date_time&lt;boost::posix_time::ptime&gt;(<span class="stringliteral">&quot;TimeStamp&quot;</span>, <span class="stringliteral">&quot;%Y-%m-%d %H:%M:%S.%f&quot;</span>);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="keyword">auto</span> fmtThreadId = expr::</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    attr&lt;boost::log::attributes::current_thread_id::value_type&gt;(<span class="stringliteral">&quot;ThreadID&quot;</span>);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keyword">auto</span> fmtSeverity = expr::</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    attr&lt;boost::log::trivial::severity_level&gt;(<span class="stringliteral">&quot;Severity&quot;</span>);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keyword">auto</span> fmtScope = expr::</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    format_named_scope(<span class="stringliteral">&quot;Scope&quot;</span>,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    keywords::format = <span class="stringliteral">&quot;%n(%f:%l)&quot;</span>,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    keywords::iteration = expr::reverse,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    keywords::depth = 2);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  boost::log::formatter logFmt =</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    expr::format(<span class="stringliteral">&quot;[%1%] (%2%) [%3%] [%4%] %5%&quot;</span>)</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    % fmtTimeStamp % fmtThreadId % fmtSeverity % fmtScope % expr::smessage;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keyword">auto</span> fsSink = boost::log::add_file_log(</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    keywords::file_name = <span class="stringliteral">&quot;test_%Y-%m-%d_%H-%M-%S.%N.log&quot;</span>,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    keywords::rotation_size = 10 * 1024 * 1024,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    keywords::min_free_space = 30 * 1024 * 1024,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    keywords::open_mode = std::ios_base::app);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  fsSink-&gt;set_formatter(logFmt);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  fsSink-&gt;locked_backend()-&gt;auto_flush(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="logs_8cpp.html#ad6d05e51e5016acafab6b6875b60bfe3">   56</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="logs_8cpp.html#ad6d05e51e5016acafab6b6875b60bfe3">Test</a>(<span class="keywordtype">void</span>) {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  BOOST_LOG_FUNCTION();</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  BOOST_LOG_TRIVIAL(info) &lt;&lt; <span class="stringliteral">&quot;Info Log in Test()&quot;</span>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
-<div class="ttc" id="alogs_8cpp_html_a873840c6f2fc327ce7219deee148d925"><div class="ttname"><a href="logs_8cpp.html#a873840c6f2fc327ce7219deee148d925">init_log</a></div><div class="ttdeci">static void init_log(void)</div><div class="ttdef"><b>Definition:</b> <a href="logs_8cpp_source.html#l00020">logs.cpp:20</a></div></div>
-<div class="ttc" id="alogs_8cpp_html_ad6d05e51e5016acafab6b6875b60bfe3"><div class="ttname"><a href="logs_8cpp.html#ad6d05e51e5016acafab6b6875b60bfe3">Test</a></div><div class="ttdeci">static void Test(void)</div><div class="ttdef"><b>Definition:</b> <a href="logs_8cpp_source.html#l00056">logs.cpp:56</a></div></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keyword">auto</span> consoleSink = boost::log::add_console_log(std::clog);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  consoleSink-&gt;set_formatter(logFmt);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <span class="comment">// auto fsSink = boost::log::add_file_log(</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="comment">//   keywords::file_name = &quot;test_%Y-%m-%d_%H-%M-%S.%N.log&quot;,</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  <span class="comment">//   keywords::rotation_size = 10 * 1024 * 1024,</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <span class="comment">//   keywords::min_free_space = 30 * 1024 * 1024,</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  <span class="comment">//   keywords::open_mode = std::ios_base::app);</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  <span class="comment">// fsSink-&gt;set_formatter(logFmt);</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  <span class="comment">// fsSink-&gt;locked_backend()-&gt;auto_flush(true);</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="logs_8cpp.html#ad6d05e51e5016acafab6b6875b60bfe3">   62</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="logs_8cpp.html#ad6d05e51e5016acafab6b6875b60bfe3">Test</a>(<span class="keywordtype">void</span>) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  BOOST_LOG_FUNCTION();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  BOOST_LOG_TRIVIAL(info) &lt;&lt; <span class="stringliteral">&quot;Info Log in Test()&quot;</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
+<div class="ttc" id="alogs_8cpp_html_a873840c6f2fc327ce7219deee148d925"><div class="ttname"><a href="logs_8cpp.html#a873840c6f2fc327ce7219deee148d925">init_log</a></div><div class="ttdeci">static void init_log(void)</div><div class="ttdoc">Initialization of logging.</div><div class="ttdef"><b>Definition:</b> <a href="logs_8cpp_source.html#l00023">logs.cpp:23</a></div></div>
+<div class="ttc" id="alogs_8cpp_html_ad6d05e51e5016acafab6b6875b60bfe3"><div class="ttname"><a href="logs_8cpp.html#ad6d05e51e5016acafab6b6875b60bfe3">Test</a></div><div class="ttdeci">static void Test(void)</div><div class="ttdoc">Test log call.</div><div class="ttdef"><b>Definition:</b> <a href="logs_8cpp_source.html#l00062">logs.cpp:62</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

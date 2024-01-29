@@ -35,3 +35,4 @@
 /comments-service/CMakeUserPresets.json
 .vscode
 scylla/scylla-data/
+doc

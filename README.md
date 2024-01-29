@@ -31,7 +31,7 @@ Additional details:
 ## Usage
 First of all you need to install make, docker and docker-compose:
 ```bash
-sudo apdate && sudo apt install -y install make docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo apt update && sudo apt install -y make docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ```
 Clone the repository:
 ```bash

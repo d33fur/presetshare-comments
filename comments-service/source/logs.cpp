@@ -17,6 +17,9 @@
 #pragma warning(pop)
 #pragma warning(disable:4503)
 
+/**
+ * @brief Initialization of logging.
+ */
 static void init_log(void) {
   namespace log = boost::log;
   namespace keywords = boost::log::keywords;
@@ -44,15 +47,18 @@ static void init_log(void) {
   auto consoleSink = boost::log::add_console_log(std::clog);
   consoleSink->set_formatter(logFmt);
 
-  auto fsSink = boost::log::add_file_log(
-    keywords::file_name = "test_%Y-%m-%d_%H-%M-%S.%N.log",
-    keywords::rotation_size = 10 * 1024 * 1024,
-    keywords::min_free_space = 30 * 1024 * 1024,
-    keywords::open_mode = std::ios_base::app);
-  fsSink->set_formatter(logFmt);
-  fsSink->locked_backend()->auto_flush(true);
+  // auto fsSink = boost::log::add_file_log(
+  //   keywords::file_name = "test_%Y-%m-%d_%H-%M-%S.%N.log",
+  //   keywords::rotation_size = 10 * 1024 * 1024,
+  //   keywords::min_free_space = 30 * 1024 * 1024,
+  //   keywords::open_mode = std::ios_base::app);
+  // fsSink->set_formatter(logFmt);
+  // fsSink->locked_backend()->auto_flush(true);
 }
 
+/**
+ * @brief Test log call.
+ */
 static void Test(void) {
   BOOST_LOG_FUNCTION();
   BOOST_LOG_TRIVIAL(info) << "Info Log in Test()";

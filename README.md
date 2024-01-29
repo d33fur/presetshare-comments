@@ -4,6 +4,8 @@ The service is written in **c++** and uses **boost/1.84.0**, **cassandra-cpp-dri
 
 **Conan** and **cmake** are used to download packages and build the project.
 
+[Documentation](https://d33fur.github.io/presetshare-comments-service/index.html)
+
 ### ScyllaDB
 
 |**KEYSPACE**|**TABLE**|

@@ -190,7 +190,7 @@ void http_connection::execute_query(const char* query) {
   CassFuture* connect_future = NULL;
   CassCluster* cluster = cass_cluster_new();
   CassSession* session = cass_session_new();
-  const char* hosts = "172.21.0.2"; //127.0.0.1
+  const char* hosts = "scylla-node1";
 
   cass_cluster_set_contact_points(cluster, hosts);
   connect_future = cass_session_connect(session, cluster);

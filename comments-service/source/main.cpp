@@ -1,6 +1,9 @@
 #include "server.hpp"
 #include "logs.cpp"
 
+/**
+ * @brief Sets the IP address and port, starts the server.
+ */
 int main(int argc, char* argv[]) {
   try {
     if(argc != 3) {

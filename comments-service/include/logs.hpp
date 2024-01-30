@@ -1,3 +1,5 @@
+#ifndef LOGS_HPP
+#define LOGS_HPP
 #pragma warning(push)
 #pragma warning(disable:4819)
 #   include <boost/shared_ptr.hpp>
@@ -29,37 +31,39 @@ static void init_log(void) {
   log::core::get()->add_global_attribute("Scope", log::attributes::named_scope());
   log::core::get()->set_filter(log::trivial::severity >= log::trivial::trace);
 
-  auto fmtTimeStamp = expr::
+  auto fmt_timestamp = expr::
     format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f");
-  auto fmtThreadId = expr::
+  auto fmt_thread_id = expr::
     attr<boost::log::attributes::current_thread_id::value_type>("ThreadID");
-  auto fmtSeverity = expr::
+  auto fmt_severity = expr::
     attr<boost::log::trivial::severity_level>("Severity");
-  auto fmtScope = expr::
+  auto fmt_scope = expr::
     format_named_scope("Scope",
     keywords::format = "%n(%f:%l)",
     keywords::iteration = expr::reverse,
     keywords::depth = 2);
-  boost::log::formatter logFmt =
+  boost::log::formatter log_fmt =
     expr::format("[%1%] (%2%) [%3%] [%4%] %5%")
-    % fmtTimeStamp % fmtThreadId % fmtSeverity % fmtScope % expr::smessage;
+    % fmt_timestamp % fmt_thread_id % fmt_severity % fmt_scope % expr::smessage;
 
-  auto consoleSink = boost::log::add_console_log(std::clog);
-  consoleSink->set_formatter(logFmt);
+  auto console_sink = boost::log::add_console_log(std::clog);
+  console_sink->set_formatter(log_fmt);
 
-  // auto fsSink = boost::log::add_file_log(
+  // auto fs_sink = boost::log::add_file_log(
   //   keywords::file_name = "test_%Y-%m-%d_%H-%M-%S.%N.log",
   //   keywords::rotation_size = 10 * 1024 * 1024,
   //   keywords::min_free_space = 30 * 1024 * 1024,
   //   keywords::open_mode = std::ios_base::app);
-  // fsSink->set_formatter(logFmt);
-  // fsSink->locked_backend()->auto_flush(true);
+  // fs_sink->set_formatter(log_fmt);
+  // fs_sink->locked_backend()->auto_flush(true);
 }
 
-/**
- * @brief Test log call.
- */
-static void Test(void) {
-  BOOST_LOG_FUNCTION();
-  BOOST_LOG_TRIVIAL(info) << "Info Log in Test()";
-}
+// /**
+//  * @brief Test log call.
+//  */
+// static void test(void) {
+//   BOOST_LOG_FUNCTION();
+//   BOOST_LOG_TRIVIAL(info) << "Info Log in Test()";
+// }
+
+#endif // LOGS_HPP

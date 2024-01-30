@@ -30,6 +30,135 @@ Additional details:
     - ```**--memory 750M**``` maximum amount of memory ScyllaDB should use
     - ```**--ovrprovisioned 1**``` indicates that ScyllaDB is running on an overprovisioned machine
     - ```**--api-adress 0.0.0.0**``` the Scylla API will listen on all network interfaces available to the container
+
+### API
+
+#### **GET {URL}/comments**
+--------
+##### **Request**:
+--------
+Headers:
+|**Key**|**Value**|
+|----|----|
+|Entity|preset-1|
+|Pagination-Page|1|
+|Pagination-Per-Page|30|
+
+**Pagination-Per-Page** boundaries are 1 >= and <= 100, in case if data is given above or below the boundary, will the value be set to 1 or 100, respectively
+
+Body: Empty
+
+##### **Response**:
+--------
+Headers:
+|**Key**|**Value**|
+|----|----|
+|Pagination-Current-Page|1|
+|Pagination-Per-Page|30|
+|Pagination-Total-Count|1|
+
+Body:
+```json
+[
+    {
+        "author": "user4",
+        "comment_id": "39fc5e75-b6db-4c24-827a-0354caf640d4",
+        "created_by": 4,
+        "created_time": 1706649049615,
+        "entity": "preset-12345",
+        "text": "i love it!!!!",
+        "updated_time": 1706649049615
+    },
+    {
+        "author": "user23",
+        "comment_id": "8f216a3e-2856-4c4f-99e9-2f2b74350e6a",
+        "created_by": 20,
+        "created_time": 1706649030666,
+        "entity": "preset-12345",
+        "text": "AWESOME",
+        "updated_time": 1706649030666
+    },
+    {
+        "author": "user2",
+        "comment_id": "dcf0edf4-ef0f-481f-aab5-2a2af6e421e2",
+        "created_by": 1,
+        "created_time": 1706649015549,
+        "entity": "preset-12345",
+        "text": "Best MUSIC",
+        "updated_time": 1706649015549
+    }
+]
+```
+
+#### **POST {URL}/comments/make**
+--------
+##### **Request**:
+--------
+Headers:
+|**Key**|**Value**|
+|----|----|
+|Entity|preset-1|
+|Author|Gleb123|
+|Created_by|15|
+
+Body:
+```json
+{
+    "text": "New comment!"
+}
+```
+
+##### **Response**:
+--------
+Headers: Empty
+
+Body: Empty
+
+
+#### **PATCH {URL}/comments/delete**
+--------
+##### **Request**:
+--------
+Headers:
+|**Key**|**Value**|
+|----|----|
+|Entity|preset-1|
+|Comment_id|280f0208-b56a-4bb7-bcb1-a2f7988cf647|
+|Created_time|1706531307174|
+
+Body: Empty
+
+##### **Response**:
+--------
+Headers: Empty
+
+Body: Empty
+
+
+#### **PATCH {URL}/comments/change**
+--------
+##### **Request**:
+--------
+Headers:
+|**Key**|**Value**|
+|----|----|
+|Entity|preset-1|
+|Comment_id|280f0208-b56a-4bb7-bcb1-a2f7988cf647|
+|Created_time|1706531307174|
+
+Body:
+```json
+{
+    "text": "Updated comment!"
+}
+```
+
+##### **Response**:
+--------
+Headers: Empty
+
+Body: Empty
+
 ## Usage
 First of all you need to install make, docker and docker-compose:
 ```bash

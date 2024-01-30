@@ -1,5 +1,4 @@
 #include "server.hpp"
-#include "logs.cpp"
 
 /**
  * @brief Sets the IP address and port, starts the server.

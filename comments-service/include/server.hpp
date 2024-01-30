@@ -1,5 +1,5 @@
-#ifndef SERVER_H
-#define SERVER_H
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
@@ -14,6 +14,8 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <cmath>
+#include "logs.hpp"
 
 namespace beast = boost::beast;
 namespace http = beast::http;
@@ -92,10 +94,18 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
    */
   void change_comment();
 
+  // /**
+  //  * @brief Checks if the comment exists. Returns true if the comment exists otherwise returns false.
+  //  * @param entity Entity
+  //  * @param comment_id Comment id
+  //  * @param created_time Created time
+  //  */
+  // bool is_comment_exists(const std::string& entity, const std::string& comment_id, const int64_t& created_time);
+
   /**
    * @brief Retrieves a json object from the request body.
    */
-  nlohmann::json get_request_json_body();
+  nlohmann::json get_request_json_body() const;
 
   /**
    * @brief Creates a session and connects to the database.
@@ -117,11 +127,11 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
   void handle_query_result(CassFuture* result_future);
 
   /**
-   * @brief Type of ODE system of equations.
+   * @brief Returns json row from databas response.
    * @param result CassResult object representing result of the query
    * @param rows Iterator for the rows of the result 
    */
-  nlohmann::json get_json_row(const CassResult* result, CassIterator* rows);
+  nlohmann::json get_json_row(const CassResult* result, CassIterator* rows) const;
   
   //! Socker
   tcp::socket socket_;
@@ -136,8 +146,7 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
   http::response<http::dynamic_body> response_;
   
   //! Timer for session timeout
-  net::steady_timer deadline_{
-      socket_.get_executor(), std::chrono::seconds(60)};
+  net::steady_timer deadline_{socket_.get_executor(), std::chrono::seconds(60)};
 };
 
 /**

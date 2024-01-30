@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['test_57',['Test',['../logs_8cpp.html#ad6d05e51e5016acafab6b6875b60bfe3',1,'logs.cpp']]]
+  ['write_5fresponse_56',['write_response',['../classhttp__connection.html#ada7ef2097afbc7a2ae13263f9edaf482',1,'http_connection']]]
 ];

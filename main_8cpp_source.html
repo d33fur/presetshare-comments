@@ -93,20 +93,21 @@ $(function() {
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    tcp::socket socket{ioc};</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="logs_8hpp.html#a873840c6f2fc327ce7219deee148d925">init_log</a>();</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    BOOST_LOG_TRIVIAL(info) &lt;&lt; <span class="stringliteral">&quot;Starting the server...&quot;</span>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="server_8cpp.html#afabf714af60d15f71ac9af4180258a1c">http_server</a>(acceptor, socket);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    ioc.run();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keywordflow">catch</span>(std::exception <span class="keyword">const</span>&amp; e) {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordflow">return</span> EXIT_FAILURE;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  }</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    BOOST_LOG_TRIVIAL(info) </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;      &lt;&lt; <span class="stringliteral">&quot;Starting the server...&quot;</span>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="server_8cpp.html#afabf714af60d15f71ac9af4180258a1c">http_server</a>(acceptor, socket);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    ioc.run();</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="keywordflow">catch</span>(std::exception <span class="keyword">const</span>&amp; e) {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">return</span> EXIT_FAILURE;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  }</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
 <div class="ttc" id="alogs_8hpp_html_a873840c6f2fc327ce7219deee148d925"><div class="ttname"><a href="logs_8hpp.html#a873840c6f2fc327ce7219deee148d925">init_log</a></div><div class="ttdeci">static void init_log(void)</div><div class="ttdoc">Initialization of logging.</div><div class="ttdef"><b>Definition:</b> <a href="logs_8hpp_source.html#l00025">logs.hpp:25</a></div></div>
 <div class="ttc" id="amain_8cpp_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdoc">Sets the IP address and port, starts the server.</div><div class="ttdef"><b>Definition:</b> <a href="main_8cpp_source.html#l00006">main.cpp:6</a></div></div>
-<div class="ttc" id="aserver_8cpp_html_afabf714af60d15f71ac9af4180258a1c"><div class="ttname"><a href="server_8cpp.html#afabf714af60d15f71ac9af4180258a1c">http_server</a></div><div class="ttdeci">void http_server(tcp::acceptor &amp;acceptor, tcp::socket &amp;socket)</div><div class="ttdoc">Starts the server.</div><div class="ttdef"><b>Definition:</b> <a href="server_8cpp_source.html#l00411">server.cpp:411</a></div></div>
+<div class="ttc" id="aserver_8cpp_html_afabf714af60d15f71ac9af4180258a1c"><div class="ttname"><a href="server_8cpp.html#afabf714af60d15f71ac9af4180258a1c">http_server</a></div><div class="ttdeci">void http_server(tcp::acceptor &amp;acceptor, tcp::socket &amp;socket)</div><div class="ttdoc">Starts the server.</div><div class="ttdef"><b>Definition:</b> <a href="server_8cpp_source.html#l00406">server.cpp:406</a></div></div>
 <div class="ttc" id="aserver_8hpp_html"><div class="ttname"><a href="server_8hpp.html">server.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

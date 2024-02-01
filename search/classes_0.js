@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['http_5fconnection_33',['http_connection',['../classhttp__connection.html',1,'']]]
+  ['http_5fconnection_38',['http_connection',['../classhttp__connection.html',1,'']]]
 ];

@@ -94,13 +94,17 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
    */
   void change_comment();
 
-  // /**
-  //  * @brief Checks if the comment exists. Returns true if the comment exists otherwise returns false.
-  //  * @param entity Entity
-  //  * @param comment_id Comment id
-  //  * @param created_time Created time
-  //  */
-  // bool is_comment_exists(const std::string& entity, const std::string& comment_id, const int64_t& created_time);
+  /**
+   * @brief Counts comments by entity.
+   * @param session Session
+   */
+  void count_comments_by_entity(CassSession* session);
+
+  /**
+   * @brief Checks if the comment exists. Returns true if the comment exists otherwise returns false.
+   * @param session Session
+   */
+  bool is_comment_exists(CassSession* session);
 
   /**
    * @brief Retrieves a json object from the request body.

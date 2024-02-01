@@ -35,6 +35,8 @@ Additional details:
 
 #### **GET {URL}/comments**
 --------
+Returns a json list of comments from newest to oldest.
+
 ##### **Request**:
 --------
 Headers:
@@ -92,6 +94,7 @@ Body:
 
 #### **POST {URL}/comments/make**
 --------
+Adds new comment to the database.
 ##### **Request**:
 --------
 Headers:
@@ -117,6 +120,7 @@ Body: Empty
 
 #### **PATCH {URL}/comments/delete**
 --------
+Changes **deleted** value to true, so that comment will not be sent from **GET {URL}/comments**.
 ##### **Request**:
 --------
 Headers:
@@ -137,6 +141,7 @@ Body: Empty
 
 #### **PATCH {URL}/comments/change**
 --------
+Changes **text** value and updates **updated_time** to **NOW()**.
 ##### **Request**:
 --------
 Headers:

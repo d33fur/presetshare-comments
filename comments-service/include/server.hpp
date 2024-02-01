@@ -15,6 +15,9 @@
 #include <memory>
 #include <string>
 #include <cmath>
+#include <algorithm>
+#include <unordered_map>
+#include <any>
 #include "logs.hpp"
 
 namespace beast = boost::beast;
@@ -50,19 +53,24 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
   void process_request();
 
   /**
-   * @brief Checks the target URL.
+   * @brief Sets information for response.
    */
-  void create_get_response();
+  void setup_response();
 
   /**
    * @brief Checks the target URL.
    */
-  void create_post_response();
+  void handle_get_request();
 
   /**
    * @brief Checks the target URL.
    */
-  void create_patch_response();
+  void handle_post_request();
+
+  /**
+   * @brief Checks the target URL.
+   */
+  void handle_patch_request();
 
    /**
    * @brief Writing from the buffer and sending a response.
@@ -96,15 +104,13 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
 
   /**
    * @brief Counts comments by entity.
-   * @param session Session
    */
-  void count_comments_by_entity(CassSession* session);
+  void count_comments_by_entity();
 
   /**
    * @brief Checks if the comment exists. Returns true if the comment exists otherwise returns false.
-   * @param session Session
    */
-  bool is_comment_exists(CassSession* session);
+  bool is_comment_exists();
 
   /**
    * @brief Retrieves a json object from the request body.
@@ -113,16 +119,15 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
 
   /**
    * @brief Creates a session and connects to the database.
-   * @param query CQL query
+   * @param statement CQL statement
    */
-  void execute_query(const char* query);
+  void connect(CassStatement* statement);
 
   /**
    * @brief Executes query.
-   * @param query CQL query
-   * @param session Session
+   * @param statement CQL statement
    */
-  void make_statement_and_send_query(const char* query, CassSession* session);
+  void execute_query(CassStatement* statement);
 
   /**
    * @brief Processes the response from the database.
@@ -151,6 +156,15 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
   
   //! Timer for session timeout
   net::steady_timer deadline_{socket_.get_executor(), std::chrono::seconds(60)};
+
+  //! Request objects in unordered_map
+  std::unordered_map<std::string, std::any> request_un_map_;
+  //! Available ScyllaDB connection hosts
+  const char* hosts_ = "172.22.0.3"; //scylla-node1
+  //! db session
+  std::unique_ptr<CassSession, decltype(&cass_session_free)> session_ = std::unique_ptr<CassSession, decltype(&cass_session_free)>(cass_session_new(), &cass_session_free);
+  //! Request target
+  beast::string_view target_;
 };
 
 /**

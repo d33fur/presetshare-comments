@@ -24,7 +24,8 @@ int main(int argc, char* argv[]) {
     tcp::socket socket{ioc};
 
     init_log();
-    BOOST_LOG_TRIVIAL(info) << "Starting the server...";
+    BOOST_LOG_TRIVIAL(info) 
+      << "Starting the server...";
     
     http_server(acceptor, socket);
 

@@ -21,77 +21,69 @@ void http_connection::read_request() {
 }
 
 void http_connection::process_request() {
+  setup_response();
+
+  try {
+    const std::unordered_map<http::verb, std::function<void()>> method_handlers = {
+      {http::verb::get, std::bind(&http_connection::handle_get_request, this)},
+      {http::verb::post, std::bind(&http_connection::handle_post_request, this)},
+      {http::verb::patch, std::bind(&http_connection::handle_patch_request, this)}
+    };
+
+    auto handler = method_handlers.find(request_.method());
+    if (handler != method_handlers.end()) {
+      handler->second();
+    } else {
+      BOOST_LOG_TRIVIAL(error) 
+          << "Invalid request method: " << request_.method_string();
+      response_.result(http::status::not_found);
+    }
+  } catch (const std::exception &e) {
+    BOOST_LOG_TRIVIAL(error) 
+      << "Error with request handling: " << e.what();
+    response_.result(http::status::bad_request);
+  }
+
+  write_response();
+}
+
+void http_connection::setup_response() {
   response_.version(request_.version());
   response_.keep_alive(false);
   response_.set(http::field::content_type, "application/json");
   response_.set(http::field::server, "presetshare.comments");
-  try {
-    switch(request_.method()) {
-      case http::verb::get: {
-        response_.result(http::status::ok);
-        create_get_response();
-        break;
-      }
-
-      case http::verb::post: {
-        response_.result(http::status::ok);
-        create_post_response();
-        break;
-      }
-
-      case http::verb::patch: {
-        response_.result(http::status::ok);
-        create_patch_response();
-        break;
-      }
-
-      default: {
-        BOOST_LOG_TRIVIAL(error) << "Invalid request method: " 
-                                 << std::string(request_.method_string());
-        response_.result(http::status::not_found);
-        break;
-      }
-    }
-  } catch (const std::exception &e) {
-    BOOST_LOG_TRIVIAL(error) << "Error with request handling: " 
-                             << e.what();
-    response_.result(http::status::bad_request);
-  }
-  write_response();
+  target_ = request_.target();
+  response_.result(http::status::ok);
 }
 
-void http_connection::create_get_response() {
-  if(request_.target() == "/comments") {
+void http_connection::handle_get_request() {
+  if(target_ == "/comments") {
     get_comments();
-  }
-  else {
-    BOOST_LOG_TRIVIAL(error) << "Invalid GET request target: " 
-                             << request_.target();
+  } else {
+    BOOST_LOG_TRIVIAL(error) 
+      << "Invalid GET request target: " << target_;
     response_.result(http::status::not_found);
   }
 }
 
-void http_connection::create_post_response() {
-  if(request_.target() == "/comments/make") {
+void http_connection::handle_post_request() {
+  if(target_ == "/comments/make") {
     add_comment();
-  }
-  else {
-    BOOST_LOG_TRIVIAL(error) << "Invalid POST request target: " 
-                             << request_.target();
+  } else {
+    BOOST_LOG_TRIVIAL(error) 
+      << "Invalid POST request target: " << target_;
     response_.result(http::status::not_found);
   }
 }
 
-void http_connection::create_patch_response() {
-  if(request_.target() == "/comments/delete") {
+void http_connection::handle_patch_request() {
+  if(target_ == "/comments/delete") {
     delete_comment();
-  }
-  else if(request_.target() == "/comments/change") {
+  } else if(target_ == "/comments/change") {
     change_comment();
-  }
-  else {
-    BOOST_LOG_TRIVIAL(error) << "Invalid POST request target: " 
-                             << request_.target();
+  } else {
+    BOOST_LOG_TRIVIAL(error) 
+      << "Invalid POST request target: " << target_;
     response_.result(http::status::not_found);
   }
 }
@@ -119,230 +111,233 @@ void http_connection::check_deadline() {
 }
 // paging state и тесты.
 void http_connection::get_comments() {
-  std::string entity((request_.find("Entity"))->value());
-  auto page = std::stoll(std::string(request_.find("Pagination-Page")->value()));
-  auto per_page = std::stoul(std::string(request_.find("Pagination-Per-Page")->value()));
-  page < 1 ? page = 1 : 0;
-  per_page > 100 ? per_page = 100 : 0;
-  per_page < 1 ? per_page = 1 : 0;
+  auto entity = std::string(request_.find("Entity")->value());
+  auto page = std::stoll(request_.find("Pagination-Page")->value());
+  auto per_page = std::stoi(request_.find("Pagination-Per-Page")->value());
+
+  page = std::max(page, 1LL);
+  per_page = std::clamp(per_page, 1, 100);
+
+  request_un_map_["entity"] = entity;
+  request_un_map_["pagination-page"] = page;
+  request_un_map_["pagination-per-page"] = per_page;
 
   response_.set("Pagination-Current-Page", std::to_string(page));
   response_.set("Pagination-Per-Page", std::to_string(per_page));
 
-  BOOST_LOG_TRIVIAL(info) << "Fetching comments for entity: " << entity
-                          << ", Page: " << page 
-                          << ", Per Page: " << per_page;
+  BOOST_LOG_TRIVIAL(info) 
+    << "Fetching comments for entity: " << entity
+    << ", Page: " << page 
+    << ", Per Page: " << per_page;
 
-  std::stringstream query_ss;
-  query_ss << "SELECT entity, created_time, comment_id, author, created_by, text, updated_time "
-            << "FROM keyspace_comments.comments WHERE entity = '" 
-            << entity << "' AND deleted = false LIMIT " << per_page;
+  const char* query =
+    "SELECT entity, created_time, comment_id, author, created_by, text, updated_time "
+    "FROM keyspace_comments.comments "
+    "WHERE entity = ? AND deleted = false "
+    "LIMIT ?";
 
-  auto query_str = query_ss.str();
-  const char* query = query_str.c_str();
-  execute_query(query);
+  auto statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(query, 2), &cass_statement_free);
+  cass_statement_bind_string(statement.get(), 0, entity.c_str());
+  cass_statement_bind_int32(statement.get(), 1, per_page);
+
+  connect(statement.get());
 }
 
 void http_connection::add_comment() {
   auto json_body = get_request_json_body();
 
-  std::string text(json_body.value("text", ""));
-  std::string author((request_.find("Author"))->value());
-  std::string entity((request_.find("Entity"))->value());
-  auto created_by = std::stoll(std::string(request_.find("Created_by")->value()));
+  auto text = json_body.value("text", "");
+  auto author = std::string(request_.find("Author")->value());
+  auto entity = std::string(request_.find("Entity")->value());
+  auto created_by = std::stoll(request_.find("Created_by")->value());
 
-  BOOST_LOG_TRIVIAL(info) << "Adding new comment for entity: " << entity;
+  request_un_map_["text"] = text;
+  request_un_map_["author"] = author;
+  request_un_map_["entity"] = entity;
+  request_un_map_["created_by"] = created_by;
 
-  std::stringstream query_ss;
-  query_ss << "INSERT INTO keyspace_comments.comments (comment_id, entity, author, "
-           << "text, deleted, created_by, created_time, updated_time) "
-           << "VALUES (uuid(), '" << entity << "', '" << author << "', '" << text << "', false, " 
-           << created_by << ", toUnixTimestamp(now()), toUnixTimestamp(now()));";
+  BOOST_LOG_TRIVIAL(info) 
+    << "Adding new comment for entity: " << entity;
 
-  auto query_str = query_ss.str();
-  const char* query = query_str.c_str();
-  execute_query(query);
+  const char* query =
+    "INSERT INTO keyspace_comments.comments (comment_id, entity, author, "
+    "text, deleted, created_by, created_time, updated_time) "
+    "VALUES (uuid(), ?, ?, "
+    "?, false, ?, toUnixTimestamp(now()), toUnixTimestamp(now()))";
+
+  auto statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(query, 4), &cass_statement_free);
+  cass_statement_bind_string(statement.get(), 0, entity.c_str());
+  cass_statement_bind_string(statement.get(), 1, author.c_str());
+  cass_statement_bind_string(statement.get(), 2, text.c_str());
+  cass_statement_bind_int64(statement.get(), 3, created_by);
+
+  connect(statement.get());
 }
 
 void http_connection::delete_comment() {
-  std::string entity((request_.find("Entity"))->value());
-  std::string comment_id((request_.find("Comment_id")->value()));
-  auto created_time = std::stoll(std::string(request_.find("Created_time")->value()));
+  auto entity = std::string(request_.find("Entity")->value());
+  auto comment_id = std::string(request_.find("Comment_id")->value());
+  auto created_time = std::stoll(request_.find("Created_time")->value());
 
-  BOOST_LOG_TRIVIAL(info) << "Deleting comment with ID: " 
-                          << comment_id 
-                          << " for entity: " 
-                          << entity;
+  request_un_map_["comment_id"] = comment_id;
+  request_un_map_["created_time"] = created_time;
+  request_un_map_["entity"] = entity;
 
-  std::stringstream query_ss;
-  query_ss << "UPDATE keyspace_comments.comments SET deleted = true WHERE entity = '" << entity 
-          << "' AND comment_id = " << comment_id 
-          << " AND created_time = " << created_time << ";";
+  BOOST_LOG_TRIVIAL(info) 
+    << "Deleting comment with ID: " << comment_id 
+    << " for entity: " << entity;
 
-  auto query_str = query_ss.str();
-  const char* query = query_str.c_str();
-  execute_query(query);
+  const char* query =
+    "UPDATE keyspace_comments.comments SET deleted = true "
+    "WHERE entity = ? AND comment_id = ? AND created_time = ?";
+
+  CassUuid uuid_comment_id;
+  cass_uuid_from_string(comment_id.c_str(), &uuid_comment_id);
+
+  auto statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(query, 3), &cass_statement_free);
+  cass_statement_bind_string(statement.get(), 0, entity.c_str());
+  cass_statement_bind_uuid(statement.get(), 1, uuid_comment_id);
+  cass_statement_bind_int64(statement.get(), 2, created_time);
+
+  connect(statement.get());
 }
 
 void http_connection::change_comment() {
   auto json_body = get_request_json_body();
 
-  std::string text(json_body.value("text", ""));
-  std::string entity((request_.find("Entity"))->value());
-  std::string comment_id((request_.find("Comment_id")->value()));
-  auto created_time = std::stoll(std::string(request_.find("Created_time")->value()));
+  auto text = json_body.value("text", "");
+  auto entity = std::string(request_.find("Entity")->value());
+  auto comment_id = std::string(request_.find("Comment_id")->value());
+  auto created_time = std::stoll(request_.find("Created_time")->value());
 
-  BOOST_LOG_TRIVIAL(info) << "Changing comment with ID: " 
-                          << comment_id 
-                          << " for entity: " 
-                          << entity;
+  request_un_map_["comment_id"] = comment_id;
+  request_un_map_["entity"] = entity;
+  request_un_map_["created_time"] = created_time;
 
-  std::stringstream query_ss;
-  query_ss << "UPDATE keyspace_comments.comments SET text = '" << text
-            << "', updated_time = toUnixTimestamp(now())"
-            << " WHERE entity = '" << entity 
-            << "' AND comment_id = " << comment_id 
-            << " AND created_time = " << created_time << ";";
+  BOOST_LOG_TRIVIAL(info) 
+    << "Changing comment with ID: " << comment_id 
+    << " for entity: " << entity;
 
-  auto query_str = query_ss.str();
-  const char* query = query_str.c_str();
-  execute_query(query);
+  const char* query =
+    "UPDATE keyspace_comments.comments SET text = ?, "
+    "updated_time = toUnixTimestamp(now()) WHERE entity = ? "
+    "AND comment_id = ? AND created_time = ?";
+
+  CassUuid uuid_comment_id;
+  cass_uuid_from_string(comment_id.c_str(), &uuid_comment_id);
+  
+  auto statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(query, 4), &cass_statement_free);
+  cass_statement_bind_string(statement.get(), 0, text.c_str());
+  cass_statement_bind_string(statement.get(), 1, entity.c_str());
+  cass_statement_bind_uuid(statement.get(), 2, uuid_comment_id);
+  cass_statement_bind_int64(statement.get(), 3, created_time);
+
+  connect(statement.get());
 }
 
-void http_connection::execute_query(const char* query) {
-  CassFuture* connect_future = NULL;
-  CassCluster* cluster = cass_cluster_new();
-  CassSession* session = cass_session_new();
-  const char* hosts = "172.22.0.2"; //scylla-node1
+void http_connection::connect(CassStatement* statement) {
+  auto cluster = std::unique_ptr<CassCluster, decltype(&cass_cluster_free)>(cass_cluster_new(), &cass_cluster_free);
+  cass_cluster_set_contact_points(cluster.get(), hosts_);
+  auto connect_future = std::unique_ptr<CassFuture, decltype(&cass_future_free)>(cass_session_connect(session_.get(), cluster.get()), &cass_future_free);
 
-  cass_cluster_set_contact_points(cluster, hosts);
-  connect_future = cass_session_connect(session, cluster);
-
-  if (cass_future_error_code(connect_future) == CASS_OK) {
-    make_statement_and_send_query(query, session);
-  } 
-  else {
+  if (cass_future_error_code(connect_future.get()) == CASS_OK) {
+    execute_query(statement);
+  } else {
     const char* message;
     size_t message_length;
-    cass_future_error_message(connect_future, &message, &message_length);
-    BOOST_LOG_TRIVIAL(error) << "Unable to connect to db: " 
-                             << std::string(message, message_length);
+    cass_future_error_message(connect_future.get(), &message, &message_length);
+    BOOST_LOG_TRIVIAL(error) 
+      << "Unable to connect to db: " << std::string(message, message_length);
   }
 
-  cass_future_free(connect_future);
-  cass_cluster_free(cluster);
-  cass_session_free(session);
 }
 
-void http_connection::make_statement_and_send_query(const char* query, 
-  CassSession* session) {
-  CassFuture* close_future = NULL;
-  CassStatement* statement = cass_statement_new(query, 0);
-  CassFuture* result_future = NULL;
- 
-  if(request_.target() == "/comments/change" || request_.target() == "/comments/delete") {
-    if(is_comment_exists(session)) {
-      result_future = cass_session_execute(session, statement);
+void http_connection::execute_query(CassStatement* statement) {
+  bool executes = true;
+
+  if (target_ == "/comments/change" || target_ == "/comments/delete") {
+    executes = is_comment_exists();
+    if (!executes) {
+      BOOST_LOG_TRIVIAL(error) 
+        << "Comment does not exists";
     }
-    else {
-      BOOST_LOG_TRIVIAL(error) << "Comment does not exists";
-    }
-  }
-  else {
-     result_future = cass_session_execute(session, statement);
   }
 
-  if(result_future != NULL) {
+  if (executes) {
+    CassFuture* result_future = cass_session_execute(session_.get(), statement);
     if (cass_future_error_code(result_future) == CASS_OK) {
-      if(request_.target() == "/comments") {
+      if (target_ == "/comments") {
         handle_query_result(result_future);
-        count_comments_by_entity(session);
+        count_comments_by_entity();
       }
-    } 
-    else {
+    } else {
       const char* message;
       size_t message_length;
       cass_future_error_message(result_future, &message, &message_length);
-      BOOST_LOG_TRIVIAL(error) << "Unable to run query: " 
-                              << std::string(message, message_length);
+      BOOST_LOG_TRIVIAL(error) 
+        << "Unable to run query: " << std::string(message, message_length);
     }
-  }
 
-  cass_statement_free(statement);
-  if(result_future != NULL) {
     cass_future_free(result_future);
   }
-
-  close_future = cass_session_close(session);
-  cass_future_wait(close_future);
-  cass_future_free(close_future);
 }
 
-void http_connection::count_comments_by_entity(CassSession* session) {
-  std::string entity((request_.find("Entity"))->value());
-  const char* check_query = "SELECT COUNT(*) FROM keyspace_comments.comments WHERE entity = ?;";
-  CassStatement* check_statement = cass_statement_new(check_query, 1);
-  const char* entity_char = entity.c_str();
-  cass_statement_bind_string(check_statement, 0, entity_char);
+void http_connection::count_comments_by_entity() {
+  const char* check_query = "SELECT COUNT(*) FROM keyspace_comments.comments WHERE entity = ?";
+  auto check_statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(check_query, 1), &cass_statement_free);
+
+  const char* entity_char = (std::any_cast<std::string>(request_un_map_["entity"])).c_str();
+  cass_statement_bind_string(check_statement.get(), 0, entity_char);
   
-  CassFuture* check_result_future = cass_session_execute(session, check_statement);
-  const CassResult* check_result = cass_future_get_result(check_result_future);
+  auto check_result_future = std::unique_ptr<CassFuture, decltype(&cass_future_free)>(cass_session_execute(session_.get(), check_statement.get()), &cass_future_free);
+  const CassResult* check_result = cass_future_get_result(check_result_future.get());
+
   const CassRow* row = cass_result_first_row(check_result);
   const CassValue* column = cass_row_get_column(row, 0);
 
   cass_int64_t count_rows;
   cass_value_get_int64(column, &count_rows);
   auto per_page = std::stoll(std::string(request_.find("Pagination-Per-Page")->value()));
-  long long total_page_count = static_cast<long long>(std::ceil(static_cast<double>(count_rows) / per_page));
+  auto total_page_count = static_cast<long long>(std::ceil(static_cast<double>(count_rows) / per_page));
   response_.set("Pagination-Total-Count", std::to_string(total_page_count));
 
   cass_result_free(check_result);
-  cass_statement_free(check_statement);
-  cass_future_free(check_result_future);
 }
 
-bool http_connection::is_comment_exists(CassSession* session) {
-  std::string entity((request_.find("Entity"))->value());
-  std::string comment_id((request_.find("Comment_id")->value()));
-  auto created_time = std::stoll(std::string(request_.find("Created_time")->value()));
-
+bool http_connection::is_comment_exists() {
   CassUuid uuid_comment_id;
-  cass_uuid_from_string(comment_id.c_str(), &uuid_comment_id);
+  cass_uuid_from_string((std::any_cast<std::string>(request_un_map_["comment_id"])).c_str(), &uuid_comment_id);
 
-  const char* check_query = "SELECT * FROM keyspace_comments.comments WHERE entity = ? AND comment_id = ? AND created_time = ?;";
-  CassStatement* check_statement = cass_statement_new(check_query, 3);
+  const char* check_query = 
+    "SELECT * FROM keyspace_comments.comments "
+    "WHERE entity = ? AND comment_id = ? AND created_time = ? AND deleted = false";
 
-  cass_statement_bind_string(check_statement, 0, entity.c_str());
-  cass_statement_bind_uuid(check_statement, 1, uuid_comment_id);
-  cass_statement_bind_int64(check_statement, 2, created_time);
+  auto check_statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(check_query, 3), &cass_statement_free);
 
-  CassFuture* check_result_future = cass_session_execute(session, check_statement);
-  const CassResult* check_result = cass_future_get_result(check_result_future);
+  cass_statement_bind_string(check_statement.get(), 0, (std::any_cast<std::string>(request_un_map_["entity"])).c_str());
+  cass_statement_bind_uuid(check_statement.get(), 1, uuid_comment_id);
+  cass_statement_bind_int64(check_statement.get(), 2, std::any_cast<long long>(request_un_map_["created_time"]));
+
+  auto check_result_future = std::unique_ptr<CassFuture, decltype(&cass_future_free)>(cass_session_execute(session_.get(), check_statement.get()), &cass_future_free);
+
+  const CassResult* check_result = cass_future_get_result(check_result_future.get());
   auto count_rows = cass_result_row_count(check_result);
+  
+  cass_result_free(check_result);
 
-  cass_statement_free(check_statement);
-  cass_future_free(check_result_future);
-
-  if(count_rows == 1) {
-    return true;
-  } 
-  else {
-    return false;
-  }
+  return count_rows == 1;
 }
 
 void http_connection::handle_query_result(CassFuture* result_future) {
   const CassResult* result = cass_future_get_result(result_future);
-  CassIterator* rows = cass_iterator_from_result(result);
+  auto rows = std::unique_ptr<CassIterator, decltype(&cass_iterator_free)>(cass_iterator_from_result(result), &cass_iterator_free);
   nlohmann::json json_array = nlohmann::json::array();
 
-  while (cass_iterator_next(rows)) {
-    json_array.push_back(get_json_row(result, rows));
+  while (cass_iterator_next(rows.get())) {
+    json_array.push_back(get_json_row(result, rows.get()));
   }
 
-  cass_iterator_free(rows);
   cass_result_free(result);
-
   beast::ostream(response_.body()) << json_array;
 }
 

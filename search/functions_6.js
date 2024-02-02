@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['init_5flog_59',['init_log',['../logs_8hpp.html#a873840c6f2fc327ce7219deee148d925',1,'logs.hpp']]],
-  ['is_5fcomment_5fexists_60',['is_comment_exists',['../classhttp__connection.html#a226833d08f7ace91b76c803d477cd0d2',1,'http_connection']]]
+  ['init_5flog_57',['init_log',['../logs_8hpp.html#a873840c6f2fc327ce7219deee148d925',1,'logs.hpp']]],
+  ['is_5fcomment_5fexists_58',['is_comment_exists',['../classhttp__connection.html#a226833d08f7ace91b76c803d477cd0d2',1,'http_connection']]]
 ];

@@ -124,9 +124,6 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ad57e497e268fc73fc7ba29907dc36b90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#ad57e497e268fc73fc7ba29907dc36b90">change_comment</a> ()</td></tr>
 <tr class="memdesc:ad57e497e268fc73fc7ba29907dc36b90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves data from the query and creates an sql query.  <a href="classhttp__connection.html#ad57e497e268fc73fc7ba29907dc36b90">More...</a><br /></td></tr>
 <tr class="separator:ad57e497e268fc73fc7ba29907dc36b90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29d3af40f842d6ca044ddf26b4c0d67f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a29d3af40f842d6ca044ddf26b4c0d67f">count_comments_by_entity</a> ()</td></tr>
-<tr class="memdesc:a29d3af40f842d6ca044ddf26b4c0d67f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts comments by entity.  <a href="classhttp__connection.html#a29d3af40f842d6ca044ddf26b4c0d67f">More...</a><br /></td></tr>
-<tr class="separator:a29d3af40f842d6ca044ddf26b4c0d67f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a226833d08f7ace91b76c803d477cd0d2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a226833d08f7ace91b76c803d477cd0d2">is_comment_exists</a> ()</td></tr>
 <tr class="memdesc:a226833d08f7ace91b76c803d477cd0d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the comment exists. Returns true if the comment exists otherwise returns false.  <a href="classhttp__connection.html#a226833d08f7ace91b76c803d477cd0d2">More...</a><br /></td></tr>
 <tr class="separator:a226833d08f7ace91b76c803d477cd0d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,7 +163,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a99ca39cbadc364c3b8492326baea2303"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::any &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a99ca39cbadc364c3b8492326baea2303">request_un_map_</a></td></tr>
 <tr class="memdesc:a99ca39cbadc364c3b8492326baea2303"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request objects in unordered_map.  <a href="classhttp__connection.html#a99ca39cbadc364c3b8492326baea2303">More...</a><br /></td></tr>
 <tr class="separator:a99ca39cbadc364c3b8492326baea2303"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6307ef00a0c8ace9ad238dd41ffb4346"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a6307ef00a0c8ace9ad238dd41ffb4346">hosts_</a> = &quot;172.22.0.3&quot;</td></tr>
+<tr class="memitem:a6307ef00a0c8ace9ad238dd41ffb4346"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#a6307ef00a0c8ace9ad238dd41ffb4346">hosts_</a> = &quot;scylla-node1&quot;</td></tr>
 <tr class="memdesc:a6307ef00a0c8ace9ad238dd41ffb4346"><td class="mdescLeft">&#160;</td><td class="mdescRight">Available ScyllaDB connection hosts.  <a href="classhttp__connection.html#a6307ef00a0c8ace9ad238dd41ffb4346">More...</a><br /></td></tr>
 <tr class="separator:a6307ef00a0c8ace9ad238dd41ffb4346"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa60ef9568fe0171c148dfe3a5f3e98d4"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; CassSession, decltype(&amp;cass_session_free)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhttp__connection.html#aa60ef9568fe0171c148dfe3a5f3e98d4">session_</a> = std::unique_ptr&lt;CassSession, decltype(&amp;cass_session_free)&gt;(cass_session_new(), &amp;cass_session_free)</td></tr>
@@ -235,7 +232,7 @@ Private Attributes</h2></td></tr>
 
 <p>Retrieves data from the query and creates an sql query. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00146">146</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00145">145</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
 </div>
@@ -264,7 +261,7 @@ Private Attributes</h2></td></tr>
 
 <p>Retrieves data from the query and creates an sql query. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00205">205</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00203">203</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
 </div>
@@ -329,36 +326,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00238">238</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a29d3af40f842d6ca044ddf26b4c0d67f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29d3af40f842d6ca044ddf26b4c0d67f">&#9670;&nbsp;</a></span>count_comments_by_entity()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void http_connection::count_comments_by_entity </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Counts comments by entity. </p>
-
-<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00285">285</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00237">237</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
 </div>
@@ -387,7 +355,7 @@ Private Attributes</h2></td></tr>
 
 <p>Retrieves data from the query and creates an sql query. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00177">177</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00174">174</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
 </div>
@@ -423,7 +391,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00255">255</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00258">258</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
 </div>
@@ -499,7 +467,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00344">344</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00347">347</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
 </div>
@@ -528,7 +496,7 @@ Private Attributes</h2></td></tr>
 
 <p>Retrieves a json object from the request body. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00395">395</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00398">398</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
 </div>
@@ -651,7 +619,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00331">331</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00319">319</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
 </div>
@@ -680,7 +648,7 @@ Private Attributes</h2></td></tr>
 
 <p>Checks if the comment exists. Returns true if the comment exists otherwise returns false. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00307">307</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8cpp_source.html#l00289">289</a> of file <a class="el" href="server_8cpp_source.html">server.cpp</a>.</p>
 
 </div>
 </div>
@@ -844,7 +812,7 @@ Private Attributes</h2></td></tr>
 
 <p>Buffer for response. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00149">149</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00144">144</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -870,7 +838,7 @@ Private Attributes</h2></td></tr>
 
 <p>Timer for session timeout. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00158">158</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00153">153</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -884,7 +852,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const char* http_connection::hosts_ = &quot;172.22.0.3&quot;</td>
+          <td class="memname">const char* http_connection::hosts_ = &quot;scylla-node1&quot;</td>
         </tr>
       </table>
   </td>
@@ -896,7 +864,7 @@ Private Attributes</h2></td></tr>
 
 <p>Available ScyllaDB connection hosts. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00163">163</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00158">158</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -922,7 +890,7 @@ Private Attributes</h2></td></tr>
 
 <p>Request. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00152">152</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00147">147</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -948,7 +916,7 @@ Private Attributes</h2></td></tr>
 
 <p>Request objects in unordered_map. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00161">161</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00156">156</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -974,7 +942,7 @@ Private Attributes</h2></td></tr>
 
 <p>Response. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00155">155</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00150">150</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -1000,7 +968,7 @@ Private Attributes</h2></td></tr>
 
 <p>db session </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00165">165</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00160">160</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -1026,7 +994,7 @@ Private Attributes</h2></td></tr>
 
 <p>Socker. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00146">146</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00141">141</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>
@@ -1052,7 +1020,7 @@ Private Attributes</h2></td></tr>
 
 <p>Request target. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00167">167</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_8hpp_source.html#l00162">162</a> of file <a class="el" href="server_8hpp_source.html">server.hpp</a>.</p>
 
 </div>
 </div>

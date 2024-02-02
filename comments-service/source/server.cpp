@@ -109,7 +109,7 @@ void http_connection::check_deadline() {
     }
   });
 }
-// paging state и тесты.
+
 void http_connection::get_comments() {
   auto entity = std::string(request_.find("Entity")->value());
   auto page = std::stoll(request_.find("Pagination-Page")->value());
@@ -133,12 +133,11 @@ void http_connection::get_comments() {
   const char* query =
     "SELECT entity, created_time, comment_id, author, created_by, text, updated_time "
     "FROM keyspace_comments.comments "
-    "WHERE entity = ? AND deleted = false "
-    "LIMIT ?";
+    "WHERE entity = ? AND deleted = false";
 
-  auto statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(query, 2), &cass_statement_free);
+  auto statement = std::unique_ptr<CassStatement, 
+    decltype(&cass_statement_free)>(cass_statement_new(query, 1), &cass_statement_free);
   cass_statement_bind_string(statement.get(), 0, entity.c_str());
-  cass_statement_bind_int32(statement.get(), 1, per_page);
 
   connect(statement.get());
 }
@@ -151,10 +150,7 @@ void http_connection::add_comment() {
   auto entity = std::string(request_.find("Entity")->value());
   auto created_by = std::stoll(request_.find("Created_by")->value());
 
-  request_un_map_["text"] = text;
-  request_un_map_["author"] = author;
   request_un_map_["entity"] = entity;
-  request_un_map_["created_by"] = created_by;
 
   BOOST_LOG_TRIVIAL(info) 
     << "Adding new comment for entity: " << entity;
@@ -165,7 +161,8 @@ void http_connection::add_comment() {
     "VALUES (uuid(), ?, ?, "
     "?, false, ?, toUnixTimestamp(now()), toUnixTimestamp(now()))";
 
-  auto statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(query, 4), &cass_statement_free);
+  auto statement = std::unique_ptr<CassStatement, 
+    decltype(&cass_statement_free)>(cass_statement_new(query, 4), &cass_statement_free);
   cass_statement_bind_string(statement.get(), 0, entity.c_str());
   cass_statement_bind_string(statement.get(), 1, author.c_str());
   cass_statement_bind_string(statement.get(), 2, text.c_str());
@@ -194,7 +191,8 @@ void http_connection::delete_comment() {
   CassUuid uuid_comment_id;
   cass_uuid_from_string(comment_id.c_str(), &uuid_comment_id);
 
-  auto statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(query, 3), &cass_statement_free);
+  auto statement = std::unique_ptr<CassStatement, 
+    decltype(&cass_statement_free)>(cass_statement_new(query, 3), &cass_statement_free);
   cass_statement_bind_string(statement.get(), 0, entity.c_str());
   cass_statement_bind_uuid(statement.get(), 1, uuid_comment_id);
   cass_statement_bind_int64(statement.get(), 2, created_time);
@@ -226,7 +224,8 @@ void http_connection::change_comment() {
   CassUuid uuid_comment_id;
   cass_uuid_from_string(comment_id.c_str(), &uuid_comment_id);
   
-  auto statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(query, 4), &cass_statement_free);
+  auto statement = std::unique_ptr<CassStatement, 
+    decltype(&cass_statement_free)>(cass_statement_new(query, 4), &cass_statement_free);
   cass_statement_bind_string(statement.get(), 0, text.c_str());
   cass_statement_bind_string(statement.get(), 1, entity.c_str());
   cass_statement_bind_uuid(statement.get(), 2, uuid_comment_id);
@@ -236,9 +235,12 @@ void http_connection::change_comment() {
 }
 
 void http_connection::connect(CassStatement* statement) {
-  auto cluster = std::unique_ptr<CassCluster, decltype(&cass_cluster_free)>(cass_cluster_new(), &cass_cluster_free);
+  auto cluster = std::unique_ptr<CassCluster, 
+    decltype(&cass_cluster_free)>(cass_cluster_new(), &cass_cluster_free);
   cass_cluster_set_contact_points(cluster.get(), hosts_);
-  auto connect_future = std::unique_ptr<CassFuture, decltype(&cass_future_free)>(cass_session_connect(session_.get(), cluster.get()), &cass_future_free);
+  auto connect_future = std::unique_ptr<CassFuture, 
+    decltype(&cass_future_free)>(cass_session_connect(
+      session_.get(), cluster.get()), &cass_future_free);
 
   if (cass_future_error_code(connect_future.get()) == CASS_OK) {
     execute_query(statement);
@@ -248,6 +250,7 @@ void http_connection::connect(CassStatement* statement) {
     cass_future_error_message(connect_future.get(), &message, &message_length);
     BOOST_LOG_TRIVIAL(error) 
       << "Unable to connect to db: " << std::string(message, message_length);
+    response_.result(http::status::bad_request);
   }
 
 }
@@ -260,6 +263,7 @@ void http_connection::execute_query(CassStatement* statement) {
     if (!executes) {
       BOOST_LOG_TRIVIAL(error) 
         << "Comment does not exists";
+      response_.result(http::status::bad_request);
     }
   }
 
@@ -268,7 +272,6 @@ void http_connection::execute_query(CassStatement* statement) {
     if (cass_future_error_code(result_future) == CASS_OK) {
       if (target_ == "/comments") {
         handle_query_result(result_future);
-        count_comments_by_entity();
       }
     } else {
       const char* message;
@@ -276,49 +279,34 @@ void http_connection::execute_query(CassStatement* statement) {
       cass_future_error_message(result_future, &message, &message_length);
       BOOST_LOG_TRIVIAL(error) 
         << "Unable to run query: " << std::string(message, message_length);
+      response_.result(http::status::bad_request);
     }
 
     cass_future_free(result_future);
   }
 }
 
-void http_connection::count_comments_by_entity() {
-  const char* check_query = "SELECT COUNT(*) FROM keyspace_comments.comments WHERE entity = ?";
-  auto check_statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(check_query, 1), &cass_statement_free);
-
-  const char* entity_char = (std::any_cast<std::string>(request_un_map_["entity"])).c_str();
-  cass_statement_bind_string(check_statement.get(), 0, entity_char);
-  
-  auto check_result_future = std::unique_ptr<CassFuture, decltype(&cass_future_free)>(cass_session_execute(session_.get(), check_statement.get()), &cass_future_free);
-  const CassResult* check_result = cass_future_get_result(check_result_future.get());
-
-  const CassRow* row = cass_result_first_row(check_result);
-  const CassValue* column = cass_row_get_column(row, 0);
-
-  cass_int64_t count_rows;
-  cass_value_get_int64(column, &count_rows);
-  auto per_page = std::stoll(std::string(request_.find("Pagination-Per-Page")->value()));
-  auto total_page_count = static_cast<long long>(std::ceil(static_cast<double>(count_rows) / per_page));
-  response_.set("Pagination-Total-Count", std::to_string(total_page_count));
-
-  cass_result_free(check_result);
-}
-
 bool http_connection::is_comment_exists() {
   CassUuid uuid_comment_id;
-  cass_uuid_from_string((std::any_cast<std::string>(request_un_map_["comment_id"])).c_str(), &uuid_comment_id);
+  cass_uuid_from_string((std::any_cast<std::string>(
+    request_un_map_["comment_id"])).c_str(), &uuid_comment_id);
 
   const char* check_query = 
     "SELECT * FROM keyspace_comments.comments "
     "WHERE entity = ? AND comment_id = ? AND created_time = ? AND deleted = false";
 
-  auto check_statement = std::unique_ptr<CassStatement, decltype(&cass_statement_free)>(cass_statement_new(check_query, 3), &cass_statement_free);
+  auto check_statement = std::unique_ptr<CassStatement, 
+    decltype(&cass_statement_free)>(cass_statement_new(check_query, 3), &cass_statement_free);
 
-  cass_statement_bind_string(check_statement.get(), 0, (std::any_cast<std::string>(request_un_map_["entity"])).c_str());
+  cass_statement_bind_string(check_statement.get(), 0, 
+    (std::any_cast<std::string>(request_un_map_["entity"])).c_str());
   cass_statement_bind_uuid(check_statement.get(), 1, uuid_comment_id);
-  cass_statement_bind_int64(check_statement.get(), 2, std::any_cast<long long>(request_un_map_["created_time"]));
+  cass_statement_bind_int64(check_statement.get(), 2, 
+    std::any_cast<long long>(request_un_map_["created_time"]));
 
-  auto check_result_future = std::unique_ptr<CassFuture, decltype(&cass_future_free)>(cass_session_execute(session_.get(), check_statement.get()), &cass_future_free);
+  auto check_result_future = std::unique_ptr<CassFuture, 
+    decltype(&cass_future_free)>(cass_session_execute(
+    session_.get(), check_statement.get()), &cass_future_free);
 
   const CassResult* check_result = cass_future_get_result(check_result_future.get());
   auto count_rows = cass_result_row_count(check_result);
@@ -330,12 +318,27 @@ bool http_connection::is_comment_exists() {
 
 void http_connection::handle_query_result(CassFuture* result_future) {
   const CassResult* result = cass_future_get_result(result_future);
-  auto rows = std::unique_ptr<CassIterator, decltype(&cass_iterator_free)>(cass_iterator_from_result(result), &cass_iterator_free);
+  auto rows = std::unique_ptr<CassIterator, 
+    decltype(&cass_iterator_free)>(cass_iterator_from_result(result), &cass_iterator_free);
   nlohmann::json json_array = nlohmann::json::array();
+  size_t total_rows = cass_result_row_count(result);
 
-  while (cass_iterator_next(rows.get())) {
-    json_array.push_back(get_json_row(result, rows.get()));
+  long long page = std::any_cast<long long>(request_un_map_["pagination-page"]);
+  int per_page = std::any_cast<int>(request_un_map_["pagination-per-page"]);
+
+  size_t start_row = per_page * (page - 1);
+  size_t end_row = per_page * page;
+
+  for (size_t i = 0; cass_iterator_next(rows.get()) && i < end_row; ++i) {
+    if (i >= start_row) {
+      json_array.push_back(get_json_row(result, rows.get()));
+    }
   }
+
+  auto total_page_count = 
+    static_cast<long long>(std::ceil(static_cast<double>(total_rows) / per_page));
+  response_.set("Pagination-Total-Pages", std::to_string(total_page_count));
+  response_.set("Pagination-Total-Comments", std::to_string(total_rows));
 
   cass_result_free(result);
   beast::ostream(response_.body()) << json_array;
@@ -396,7 +399,7 @@ nlohmann::json http_connection::get_request_json_body() const {
   const auto& body = request_.body();
   std::stringstream ss;
 
-  for (const auto& buffer : body.data()) {
+  for(const auto& buffer : body.data()) {
     ss << boost::beast::make_printable(buffer);
   }
 

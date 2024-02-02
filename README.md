@@ -48,6 +48,9 @@ Headers:
 
 **Pagination-Per-Page** boundaries are 1 >= and <= 100, in case if data is given above or below the boundary, will the value be set to 1 or 100, respectively
 
+
+If **Pagenation-Page** < 0, it will be set to 1
+
 Body: Empty
 
 ##### **Response**:
@@ -57,7 +60,8 @@ Headers:
 |----|----|
 |Pagination-Current-Page|1|
 |Pagination-Per-Page|30|
-|Pagination-Total-Count|1|
+|Pagination-Total-Pages|1|
+|Pagination-Total-Comments|3|
 
 Body:
 ```json

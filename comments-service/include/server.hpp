@@ -103,11 +103,6 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
   void change_comment();
 
   /**
-   * @brief Counts comments by entity.
-   */
-  void count_comments_by_entity();
-
-  /**
    * @brief Checks if the comment exists. Returns true if the comment exists otherwise returns false.
    */
   bool is_comment_exists();
@@ -160,7 +155,7 @@ class http_connection : public std::enable_shared_from_this<http_connection> {
   //! Request objects in unordered_map
   std::unordered_map<std::string, std::any> request_un_map_;
   //! Available ScyllaDB connection hosts
-  const char* hosts_ = "172.22.0.3"; //scylla-node1
+  const char* hosts_ = "scylla-node1"; //scylla-node1 172.22.0.3, 172.22.0.2
   //! db session
   std::unique_ptr<CassSession, decltype(&cass_session_free)> session_ = std::unique_ptr<CassSession, decltype(&cass_session_free)>(cass_session_new(), &cass_session_free);
   //! Request target

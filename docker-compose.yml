@@ -6,6 +6,9 @@ services:
       context: ./
       dockerfile: Dockerfile.comments-service
     restart: always
+    depends_on:
+      scylla-node1:
+        condition: service_started
     ports:
       - "8080:8080"
     networks:
